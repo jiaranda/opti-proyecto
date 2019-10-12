@@ -3,6 +3,7 @@ import requests
 import json
 from math import isnan
 
+print('getting params')
 
 data = pd.read_csv('./data/database.csv', sep=';')
 
@@ -38,9 +39,7 @@ medics = data.ID_MEDICO.unique().tolist()
 
 # medical center boxes
 
-medical_center_boxes = dict()
-for med_id in data.ID_LUGAR.unique():
-    medical_center_boxes[med_id] = list(range(1,21))
+medical_centers_boxes = list(range(1,15))
 
 
 # connect to Google Maps API to get times between medical centers
@@ -74,7 +73,7 @@ def get_data_from_maps_api(medical_centers, enumerated):
         request_text = url + '&origins=' + origin + '&destinations=' + destination + '&key=AIzaSyBVVOTvCC_sbViOkqq8q64563ss5zafdAM'
         req = requests.get(request_text, headers=headers)
         res = req.json()
-        time_between[(enumerated[pair[0]], enumerated[pair[1]])] = int(res['rows'][0]['elements'][0]['duration']['value'])/(60*60) # from seconds to hours
+        time_between[(pair[0], pair[1])] = int(res['rows'][0]['elements'][0]['duration']['value'])/(60*60) # from seconds to hours
     return time_between
 
 time_between = get_data_from_maps_api(medical_centers, enumerated)
@@ -101,3 +100,5 @@ def get_notification_rates(data):
     return notification_rates
 
 notification_rates = get_notification_rates(data)
+
+print('params ready')
