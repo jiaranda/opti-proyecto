@@ -37,9 +37,22 @@ months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 medics = data.ID_MEDICO.unique().tolist()
 
 
-# medical center boxes
+boxes_data = pd.read_csv('./../data/boxes-database.csv', sep=';')
 
-medical_centers_boxes = list(range(1,15))
+
+
+def get_boxes(enumerated, boxes_data):
+    
+    boxes = {}
+    for index, row in boxes_data.iterrows():
+        boxes[enumerated[row['CENTRO']]] = row['N_BOXES']
+    
+    return boxes
+
+    
+medical_centers_boxes = get_boxes(enumerated, boxes_data)
+
+
 
 
 # connect to Google Maps API to get times between medical centers
