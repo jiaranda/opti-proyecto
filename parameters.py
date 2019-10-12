@@ -73,7 +73,7 @@ def get_data_from_maps_api(medical_centers, enumerated):
         request_text = url + '&origins=' + origin + '&destinations=' + destination + '&key=AIzaSyBVVOTvCC_sbViOkqq8q64563ss5zafdAM'
         req = requests.get(request_text, headers=headers)
         res = req.json()
-        time_between[(enumerated[pair[0]], enumerated[pair[1]])] = int(res['rows'][0]['elements'][0]['duration']['value'])/(60*60) # from seconds to hours
+        time_between[(pair[0], pair[1])] = int(res['rows'][0]['elements'][0]['duration']['value'])/(60*60) # from seconds to hours
     return time_between
 
 time_between = get_data_from_maps_api(medical_centers, enumerated)
