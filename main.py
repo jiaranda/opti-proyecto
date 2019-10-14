@@ -13,16 +13,10 @@ params = {
     'action_plan_cost': action_plan_cost
 }
 
-print('defining model')
 model = define_model(**params)
-print('model ready')
 
-print('optimizing')
 model.optimize()
-print('🎈')
 
-model.printAttr("X")
-
-print("\n-------------\n")
+# model.printAttr("X")
 # for constr in model.getConstrs():
 #     print(constr, constr.getAttr("slack"))
