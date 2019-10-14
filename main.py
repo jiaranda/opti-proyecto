@@ -1,5 +1,6 @@
 from parameters import medical_centers, medics, modules, days, notification_rates, time_between, medical_centers_boxes, fine_cost, action_plan_cost
 from model import define_model
+from get_output import get_model_output
 
 params = {
     'medical_centers': medical_centers,
@@ -16,6 +17,8 @@ params = {
 model = define_model(**params)
 
 model.optimize()
+
+get_model_output(model)
 
 # model.printAttr("X")
 # for constr in model.getConstrs():
