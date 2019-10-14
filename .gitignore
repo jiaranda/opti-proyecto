@@ -9,6 +9,8 @@ __pycache__/
 # Data
 data/*
 schedule.json
+action_plans.json
+fines.json
 
 # Distribution / packaging
 .Python
