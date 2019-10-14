@@ -25,23 +25,19 @@ def get_model_output(model):
         elif 'delta' in var.varName and int(var.x) != 0:
             medical_center = var.varName.strip('delta').strip('[]')
             fine[count] = {
-                'name': 'delta',
-                'medical_center': medical_center,
-                'value': var.x
+                'medical_center': medical_center
             }
             count += 1
         elif 'theta' in var.varName and int(var.x) != 0:
             medical_center = var.varName.strip('theta').strip('[]')
             action_plan[count] = {
-                'name': 'theta',
-                'medical_center': medical_center,
-                'value': var.x
+                'medical_center': medical_center
             }
             count += 1
 
     optimal_solution_x = pd.DataFrame.from_dict(optimal_solution_x, orient='index')
-    fine = pd.DataFrame.from_dict(fine, orient='index')
-    action_plan = pd.DataFrame.from_dict(action_plan, orient='index')
+    # fine = pd.DataFrame.from_dict(fine, orient='index')
+    # action_plan = pd.DataFrame.from_dict(action_plan, orient='index')
 
 
     schedules = dict()
@@ -54,6 +50,12 @@ def get_model_output(model):
 
     with open('./schedule.json', 'w') as file:
         file.write(json.dumps(schedules))
+
+    with open('./fines.json', 'w') as file:
+        file.write(json.dumps(fine))
+
+    with open('./action_plans.json', 'w') as file:
+        file.write(json.dumps(action_plan))    
 
 
 
