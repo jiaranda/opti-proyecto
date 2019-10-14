@@ -81,7 +81,7 @@ def get_notification_rates(data):
 
 # load data
 data = pd.read_csv('./data/database-valparaiso.csv', sep=';')
-centers_data = pd.read_csv('./data/database-centers.csv', sep=';')
+centers_data = pd.read_csv('./data/database-centers-valparaiso.csv', sep=';')
 
 medical_centers = add_id_to_medical_centers(data)
 
@@ -90,10 +90,11 @@ medical_centers_regions = get_centers_data(centers_data, 'REGION')
 medical_centers_cities = get_centers_data(centers_data, 'CIUDAD')
 
 time_between = get_data_from_maps_api(medical_centers, medical_centers_regions, medical_centers_cities)
+notification_rates = get_notification_rates(data)
 
-days = list(range(1, 25))
-months = list(range(1, 6 + 1))
+days = list(range(1, 6 + 1))
 medics = data.ID_MEDICO.unique().tolist()
+modules = [1, 2]
 
-fine = 750  # UF
-action_plan = 100  # UF
+fine_cost = 750  # UF
+action_plan_cost = 100  # UF

@@ -8,6 +8,7 @@ __pycache__/
 
 # Data
 data/*
+schedule.json
 
 # Distribution / packaging
 .Python
