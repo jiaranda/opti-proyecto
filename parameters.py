@@ -18,19 +18,19 @@ def add_id_to_medical_centers(data):
         for key, value in enumerated.items():
             if row['CENTRO'] == key:
                 data.loc[index, 'ID_LUGAR'] = value
-    return medical_centers, enumerated
+    return medical_centers
 
 
-def get_boxes(enumerated, boxes_data):
+def get_boxes(boxes_data):
     
     boxes = {}
     for index, row in boxes_data.iterrows():
-        boxes[enumerated[row['CENTRO']]] = row['N_BOXES']
+        boxes[row['CENTRO']] = row['N_BOXES']
     
     return boxes
 
 
-def get_data_from_maps_api(medical_centers, enumerated):
+def get_data_from_maps_api(medical_centers):
     url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric'
     headers = {
         'authority': 'maps.googleapis.com',
@@ -84,15 +84,15 @@ def get_notification_rates(data):
 
 # load data
 data = pd.read_csv('./data/database.csv', sep=';')
-boxes_data = pd.read_csv('./data/database-centers.csv', sep=';')
+centers_data = pd.read_csv('./data/database-centers.csv', sep=';')
 
-medical_centers, enumerated = add_id_to_medical_centers(data)
+medical_centers = add_id_to_medical_centers(data)
 
-medical_centers_boxes = get_boxes(enumerated, boxes_data)
-time_between = get_data_from_maps_api(medical_centers, enumerated)
+medical_centers_boxes = get_boxes(centers_data)
+time_between = get_data_from_maps_api(medical_centers)
 notification_rates = get_notification_rates(data)
 
 modules = [1, 2]
 days = list(range(1, 25))
-months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+months = list(range(1, 6 + 1))
 medics = data.ID_MEDICO.unique().tolist()
