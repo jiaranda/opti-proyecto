@@ -22,11 +22,9 @@ def add_id_to_medical_centers(data):
 
 
 def get_centers_data(centers_data, column):
-    
     boxes = dict()
     for index, row in centers_data.iterrows():
         boxes[row['CENTRO']] = row[column]
-    
     return boxes
 
 
@@ -43,8 +41,7 @@ def get_data_from_maps_api(medical_centers, medical_centers_regions, medical_cen
         'upgrade-insecure-requests': '1',
         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36'
     }
-
-
+    
     # get all medical center combinations
     medical_centers_combinations = list()
     for i in medical_centers:
@@ -100,5 +97,3 @@ medics = data.ID_MEDICO.unique().tolist()
 
 fine = 750  # UF
 action_plan = 100  # UF
-
-print(time_between)
