@@ -12,7 +12,7 @@
 
 ### Get the data
 
-Create `database-valparaiso.csv` file into `data` folder.
+Create `database-valparaiso.csv` and `database-centers-valparaiso.csv` files into `data` folder.
 
 ### Run :tada:
 
