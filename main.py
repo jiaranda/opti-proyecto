@@ -19,7 +19,3 @@ model = define_model(**params)
 model.optimize()
 
 get_model_output(model)
-
-# model.printAttr("X")
-# for constr in model.getConstrs():
-#     print(constr, constr.getAttr("slack"))
