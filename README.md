@@ -20,4 +20,4 @@ Create `database-valparaiso.csv` and `database-centers-valparaiso.csv` files int
 
 ## Output
 
-After running the model, `schedule.json` file will be created, containing each medic weekly schedule.
+After running the model, `schedule.json`,  `fines.json` and `action_plans.json` files will be created, containing each medic weekly schedule and each medical center that will be fined and that will have to create and action plan.
