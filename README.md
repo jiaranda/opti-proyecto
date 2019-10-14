@@ -12,7 +12,7 @@
 
 ### Get the data
 
-Create `database-valparaiso.csv` file into `data` folder.
+Create `database-valparaiso.csv` and `database-centers-valparaiso.csv` files into `data` folder.
 
 ### Run :tada:
 
@@ -20,4 +20,4 @@ Create `database-valparaiso.csv` file into `data` folder.
 
 ## Output
 
-After running the model, `schedule.json` file will be created, containing each medic weekly schedule.
+After running the model, `schedule.json`,  `fines.json` and `action_plans.json` files will be created, containing each medic weekly schedule and each medical center that will be fined and that will have to create and action plan.
