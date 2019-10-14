@@ -39,19 +39,21 @@ def define_model(
             name='r1'
     )
     
-    model.addConstrs(
-        (quicksum(
-            x[medic, center, day, module] for medic in medics
-        ) == medical_centers_boxes[center] for center in medical_centers for day in days for module in modules),
-        name='r2'
-    )
+    if sum(medical_centers_boxes.values()) * 12 <= len(medics) * 10:
+        model.addConstrs(
+            (quicksum(
+                x[medic, center, day, module] for medic in medics
+            ) == medical_centers_boxes[center] for center in medical_centers for day in days for module in modules),
+            name='r2'
+        )
 
-    model.addConstrs(
-        (quicksum(
-            x[medic, center, day, module] for center in medical_centers for day in days for module in modules
-        ) <= 10 for medic in medics),
-        name='r3'
-    )
+    if sum(medical_centers_boxes.values()) * 12 >= len(medics) * 10:
+        model.addConstrs(
+            (quicksum(
+                x[medic, center, day, module] for center in medical_centers for day in days for module in modules
+            ) == 10 for medic in medics),
+            name='r3'
+        )
 
     model.addConstrs(
         (quicksum(
