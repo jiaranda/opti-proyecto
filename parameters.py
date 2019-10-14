@@ -21,14 +21,13 @@ def add_id_to_medical_centers(data):
     return medical_centers
 
 
-def get_boxes(boxes_data):
+def get_centers_data(centers_data, column):
     
-    boxes = {}
-    for index, row in boxes_data.iterrows():
-        boxes[row['CENTRO']] = row['N_BOXES']
+    boxes = dict()
+    for index, row in centers_data.iterrows():
+        boxes[row['CENTRO']] = row[column]
     
     return boxes
-
 
 def get_data_from_maps_api(medical_centers):
     url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric'
@@ -54,8 +53,8 @@ def get_data_from_maps_api(medical_centers):
     time_between = dict()
 
     for pair in medical_centers_combinations:
-        origin = pair[0] + ' REDSALUD, CHILE'
-        destination = pair[1] + ' REDSALUD, CHILE'
+        origin = pair[0] + f' REDSALUD, CHILE'
+        destination = pair[1] + f' REDSALUD, CHILE'
         request_text = url + '&origins=' + origin + '&destinations=' + destination + '&key=AIzaSyBVVOTvCC_sbViOkqq8q64563ss5zafdAM'
         req = requests.get(request_text, headers=headers)
         res = req.json()
@@ -88,11 +87,8 @@ centers_data = pd.read_csv('./data/database-centers.csv', sep=';')
 
 medical_centers = add_id_to_medical_centers(data)
 
-medical_centers_boxes = get_boxes(centers_data)
-time_between = get_data_from_maps_api(medical_centers)
-notification_rates = get_notification_rates(data)
-
-modules = [1, 2]
+medical_centers_boxes = get_centers_data(centers_data, 'N_BOXES')
+medical_centers_regions = get_centers_data(centers_data, 'REGION')
 days = list(range(1, 25))
 months = list(range(1, 6 + 1))
 medics = data.ID_MEDICO.unique().tolist()
