@@ -92,8 +92,7 @@ medical_centers_cities = get_centers_data(centers_data, 'CIUDAD')
 time_between = get_data_from_maps_api(medical_centers, medical_centers_regions, medical_centers_cities)
 notification_rates = get_notification_rates(data)
 
-days = list(range(1, 25))
-months = list(range(1, 6 + 1))
+days = list(range(1, 6 + 1))
 medics = data.ID_MEDICO.unique().tolist()
 modules = [1, 2]
 
