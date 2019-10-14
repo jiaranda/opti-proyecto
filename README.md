@@ -4,6 +4,7 @@
 ### Requirements
 
 - Python 3.7 or higher
+- Gurobi Optimizer Software
 
 ### Install dependencies
 
