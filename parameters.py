@@ -3,11 +3,6 @@ import requests
 import json
 from math import isnan
 
-print('getting params')
-
-data = pd.read_csv('./data/database.csv', sep=';')
-
-# medical centers
 
 def add_id_to_medical_centers(data):
     medical_centers = data.CENTRO.unique()
@@ -23,41 +18,17 @@ def add_id_to_medical_centers(data):
         for key, value in enumerated.items():
             if row['CENTRO'] == key:
                 data.loc[index, 'ID_LUGAR'] = value
-    return medical_centers, enumerated
+    return medical_centers
 
 
-medical_centers, enumerated = add_id_to_medical_centers(data)
-
-
-# modules, days, months and medics
-
-modules = [1, 2]
-days = list(range(1, 25))
-months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-medics = data.ID_MEDICO.unique().tolist()
-
-
-boxes_data = pd.read_csv('./../data/boxes-database.csv', sep=';')
-
-
-
-def get_boxes(enumerated, boxes_data):
-    
-    boxes = {}
-    for index, row in boxes_data.iterrows():
-        boxes[enumerated[row['CENTRO']]] = row['N_BOXES']
-    
+def get_centers_data(centers_data, column):
+    boxes = dict()
+    for index, row in centers_data.iterrows():
+        boxes[row['CENTRO']] = row[column]
     return boxes
 
-    
-medical_centers_boxes = get_boxes(enumerated, boxes_data)
 
-
-
-
-# connect to Google Maps API to get times between medical centers
-
-def get_data_from_maps_api(medical_centers, enumerated):
+def get_data_from_maps_api(medical_centers, medical_centers_regions, medical_centers_cities):
     url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric'
     headers = {
         'authority': 'maps.googleapis.com',
@@ -70,8 +41,7 @@ def get_data_from_maps_api(medical_centers, enumerated):
         'upgrade-insecure-requests': '1',
         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36'
     }
-
-
+    
     # get all medical center combinations
     medical_centers_combinations = list()
     for i in medical_centers:
@@ -81,18 +51,14 @@ def get_data_from_maps_api(medical_centers, enumerated):
     time_between = dict()
 
     for pair in medical_centers_combinations:
-        origin = pair[0] + ' REDSALUD, CHILE'
-        destination = pair[1] + ' REDSALUD, CHILE'
+        origin = pair[0] + f' REDSALUD, {medical_centers_cities[pair[0]]}, {medical_centers_regions[pair[0]]}, CHILE'
+        destination = pair[1] + f' REDSALUD, {medical_centers_cities[pair[1]]}, {medical_centers_regions[pair[1]]}, CHILE'
         request_text = url + '&origins=' + origin + '&destinations=' + destination + '&key=AIzaSyBVVOTvCC_sbViOkqq8q64563ss5zafdAM'
         req = requests.get(request_text, headers=headers)
         res = req.json()
         time_between[(pair[0], pair[1])] = int(res['rows'][0]['elements'][0]['duration']['value'])/(60*60) # from seconds to hours
     return time_between
 
-time_between = get_data_from_maps_api(medical_centers, enumerated)
-
-
-# Medic notification rate
 
 def get_notification_rates(data):
     medic_stats = dict()
@@ -112,6 +78,22 @@ def get_notification_rates(data):
         notification_rates[key] = value['notified']/(value['not_notified'] + value['notified']) if value['not_notified'] != 0 else 1.0
     return notification_rates
 
-notification_rates = get_notification_rates(data)
 
-print('params ready')
+# load data
+data = pd.read_csv('./data/database-valparaiso.csv', sep=';')
+centers_data = pd.read_csv('./data/database-centers.csv', sep=';')
+
+medical_centers = add_id_to_medical_centers(data)
+
+medical_centers_boxes = get_centers_data(centers_data, 'N_BOXES')
+medical_centers_regions = get_centers_data(centers_data, 'REGION')
+medical_centers_cities = get_centers_data(centers_data, 'CIUDAD')
+
+time_between = get_data_from_maps_api(medical_centers, medical_centers_regions, medical_centers_cities)
+
+days = list(range(1, 25))
+months = list(range(1, 6 + 1))
+medics = data.ID_MEDICO.unique().tolist()
+
+fine = 750  # UF
+action_plan = 100  # UF
